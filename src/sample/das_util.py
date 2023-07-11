@@ -27,6 +27,8 @@ from dasstore.zarr import Client
 from multiprocessing import Pool
 from matplotlib import pyplot as plt
 
+def next_power_of_2(x):  
+    return 1 if x == 0 else 2**(x - 1).bit_length()
 
 def read_decimate(file_path, dsamp_factor=20, start_ch=0, end_ch=100):
     with h5py.File(file_path,'r') as f:      
