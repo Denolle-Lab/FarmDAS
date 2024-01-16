@@ -9,11 +9,13 @@ velocity and attenuation properties of the shallow subsurface materials
 
 This package is based on the pacakge [Noisepy4DAS][noisepy4das]
 to analysis the raw Distributed Acoustic Sensing (DAS) records for 
-virtual earthquake data. You can find the src codes for data processing
-and the example jupyter notebooks that focus on the case study in a 
+virtual earthquake data. You can find the [source codes][source] for data processing
+and the example [jupyter notebooks][jupyters] that focus on the case study in a 
 agricultural setting.
 
 
 
 
 [noisepy4das]: https://github.com/niyiyu/NoisePy4DAS-SeaDAS
+[source]: https://github.com/Denolle-Lab/FarmDAS/tree/main/src
+[jupyters]: https://github.com/Denolle-Lab/FarmDAS/tree/main/examples
