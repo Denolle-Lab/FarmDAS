@@ -1,0 +1,82 @@
+Time,Temperature,Dew Point,Humidity,Wind,Wind Speed,Condition
+5:50 PM,14,7,63,SSW,9,Showers in the Vicinity
+6:20 PM,13,7,67,S,9,Showers in the Vicinity
+6:50 PM,13,7,67,S,13,Fair
+7:20 PM,12,7,72,S,11,Fair
+7:50 PM,12,7,72,S,9,Fair
+8:20 PM,12,8,77,SSE,9,Fair
+8:50 PM,12,8,77,S,11,Light Rain Shower
+9:20 PM,11,8,82,S,9,Showers in the Vicinity
+9:50 PM,11,8,82,SSE,9,Light Rain
+10:20 PM,10,8,87,SSE,11,Fair
+10:50 PM,10,8,87,SSE,11,Fair
+11:20 PM,10,8,87,SSE,13,Partly Cloudy
+11:50 PM,10,9,94,SSE,11,Light Rain
+12:20 AM,10,8,87,SSE,11,Partly Cloudy
+12:50 AM,10,9,94,SSE,15,Mostly Cloudy
+1:20 AM,10,9,94,SSE,13,Cloudy
+1:50 AM,10,9,94,SSE,9,Cloudy
+2:20 AM,10,8,87,SSE,9,Cloudy
+2:50 AM,10,8,87,SSE,9,Mostly Cloudy
+3:20 AM,9,8,93,SE,7,Cloudy
+3:50 AM,9,8,93,SSE,9,Mostly Cloudy
+4:20 AM,9,8,93,SSE,7,Mostly Cloudy
+4:50 AM,8,8,100,SSE,7,Partly Cloudy
+5:50 AM,9,8,93,S,6,Mostly Cloudy
+6:20 AM,9,8,93,SE,6,Mostly Cloudy
+6:50 AM,9,8,93,SE,9,Drizzle
+7:20 AM,9,9,100,SSE,6,Rain
+7:50 AM,9,9,100,SE,7,Mostly Cloudy
+8:20 AM,10,9,94,SSE,7,Light Rain
+8:50 AM,10,9,94,SSE,7,Light Rain
+9:20 AM,10,10,100,SSE,9,Mostly Cloudy
+9:50 AM,10,9,94,SSE,9,Mostly Cloudy
+10:20 AM,10,9,94,S,7,Mostly Cloudy
+10:50 AM,11,9,88,S,9,Mostly Cloudy
+11:20 AM,11,9,88,S,9,Mostly Cloudy
+11:50 AM,12,9,82,SSW,7,Mostly Cloudy
+12:20 PM,12,9,82,SSW,9,Showers in the Vicinity
+12:50 PM,12,9,82,S,9,Mostly Cloudy
+1:20 PM,13,9,77,SSE,11,Mostly Cloudy
+1:50 PM,13,9,77,S,9,Mostly Cloudy
+2:20 PM,14,9,72,SW,9,Mostly Cloudy
+2:50 PM,14,9,72,SW,9,Partly Cloudy
+3:20 PM,13,8,72,WSW,11,Showers in the Vicinity
+3:50 PM,14,9,72,SW,11,Showers in the Vicinity
+4:20 PM,14,8,67,WSW,7,Showers in the Vicinity
+4:50 PM,13,8,72,WSW,15,Light Rain Shower
+5:20 PM,13,9,77,W,11,Showers in the Vicinity
+5:50 PM,13,9,77,WSW,9,Showers in the Vicinity
+6:20 PM,12,9,82,WSW,9,Light Rain Shower
+6:50 PM,11,9,88,W,11,Light Rain Shower
+7:20 PM,10,8,87,W,6,Showers in the Vicinity
+7:50 PM,10,9,94,SSW,6,Mostly Cloudy
+8:20 PM,11,9,88,W,6,Mostly Cloudy
+8:50 PM,11,8,82,W,9,Mostly Cloudy
+9:20 PM,10,8,87,W,7,Mostly Cloudy
+9:50 PM,10,7,82,NW,35,Light Rain / Windy
+10:20 PM,8,6,87,NW,26,Light Rain
+10:50 PM,8,6,87,NW,26,Mostly Cloudy
+11:20 PM,7,5,87,NW,20,Light Rain
+11:50 PM,7,5,87,NW,17,Light Rain
+12:20 AM,7,5,87,NW,19,Mostly Cloudy
+12:50 AM,7,5,87,NW,20,Mostly Cloudy
+1:20 AM,7,5,87,NW,22,Fair
+1:50 AM,7,4,81,NW,20,Fair
+2:20 AM,7,4,81,WNW,17,Fair
+2:50 AM,6,3,81,NW,19,Partly Cloudy
+3:20 AM,6,3,81,NW,15,Fair
+3:50 AM,5,3,87,WNW,11,Fair
+4:20 AM,5,3,87,WNW,13,Fair
+4:50 AM,5,3,87,WNW,13,Fair
+5:20 AM,5,2,81,WNW,13,Fair
+5:50 AM,5,2,81,WNW,11,Fair
+6:20 AM,5,2,81,WNW,13,Fair
+6:50 AM,5,2,81,WNW,11,Fair
+7:20 AM,5,2,81,WNW,9,Partly Cloudy
+7:50 AM,6,3,81,W,13,Mostly Cloudy
+8:20 AM,6,3,81,WNW,11,Mostly Cloudy
+8:50 AM,6,3,81,WNW,11,Mostly Cloudy
+9:20 AM,7,4,81,WNW,13,Partly Cloudy
+9:50 AM,7,4,81,NW,17,Mostly Cloudy
+10:20 AM,7,4,81,WNW,15,Mostly Cloudy
