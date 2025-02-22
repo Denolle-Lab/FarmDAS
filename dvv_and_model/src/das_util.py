@@ -26,6 +26,7 @@ from scipy.signal import spectrogram
 from dasstore.zarr import Client
 from multiprocessing import Pool
 from matplotlib import pyplot as plt
+from sklearn.metrics import mean_squared_error
 
 def next_power_of_2(x):  
     return 1 if x == 0 else 2**(x - 1).bit_length()
@@ -501,3 +502,14 @@ def multi_bounds(iloc, peaks, input_image, ax, cc_dvv, new_peaks):
     ax.scatter(x, new_peaks[iloc] / 0.01 - 75, cmap='viridis', c=cc_dvv[iloc], s=10, marker='o', vmin=0.3, vmax=0.5)
 
     return new_peaks[iloc]  / 0.01 -75  
+
+
+
+def compute_misfit(a, b, tillage_interpolated, tire_interpolated, dvv_variability):
+    scaled_mechanical = np.power(tillage_interpolated, a) * np.power(tire_interpolated, b)
+    scaled_mechanical = scaled_mechanical/np.std(scaled_mechanical)
+    scaled_variability =dvv_variability/np.std(dvv_variability)
+    correlation = np.corrcoef(scaled_variability, scaled_mechanical)[0, 1]
+    mse = mean_squared_error(scaled_variability, scaled_mechanical)
+
+    return correlation, mse, scaled_mechanical, scaled_variability
