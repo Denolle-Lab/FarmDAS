@@ -185,7 +185,7 @@ def get_SSR(fnum: int, para) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         logger.info(f"--- file No. {aa} ---")
         r = float(vdist[aa])
         twindow = []
-        twindow = np.arange(twinbe[aa][fb][0], twinbe[aa][fb][1], dt)
+        twindow = np.arange(twinbe[0], twinbe[1], dt)
         SSR_temppp = np.ndarray((len(mfpx), len(intby), len(twindow)))
 
         # grid search in combination of mean_free_path and intrinsic_b
@@ -324,7 +324,7 @@ def get_optimal(fnum: int, para) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     result_mfp = np.take(xmin, 0)
 
     twindow = []
-    twindow = np.arange((twinbe[aa][fb][0]), (twinbe[aa][fb][1]), dt)
+    twindow = np.arange((twinbe[0]), (twinbe[1]), dt)
 
     Eobs = np.ndarray((npts))
     Esyn = np.ndarray((npts))
