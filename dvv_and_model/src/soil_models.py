@@ -100,7 +100,8 @@ class hydro0:
 
             s_rate = self.A_p * self.prec[i] - self.A_e * self.evap - self.A_d * self.drain
             
-            self.s += s_rate 
+            self.s += s_rate
+            self.s = min(self.s, 1) 
             s_history[i] = self.s
 
         return s_history
@@ -151,7 +152,7 @@ class litho:
 
     def get_vp_vs(self):
         
-        # self.K = self.K_d + (1-self.K_d/self.K_s)**2 / (self.phi/self.K_f + (1-self.phi)/self.K_s - self.K_d/self.K_s**2)
+        self.K = self.K_d + (1-self.K_d/self.K_s)**2 / (self.phi/self.K_f + (1-self.phi)/self.K_s - self.K_d/self.K_s**2)
         self.G = self.G_d
         self.vp = np.sqrt((self.K + 4*self.G/3)/self.rho)
         self.vs = np.sqrt(self.G/self.rho)

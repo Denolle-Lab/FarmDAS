@@ -1,7 +1,6 @@
 import sys
 sys.path.append(".")
 sys.path.append("noisepy4das_repo/NoisePy4DAS-SeaDAS/src")
-sys.path.append("noisepy4das_repo/NoisePy4DAS-SeaDAS/DASstore")
 
 
 import os
@@ -23,7 +22,6 @@ from scipy.signal import detrend
 from scipy.signal import decimate
 from scipy.signal import filtfilt
 from scipy.signal import spectrogram
-from dasstore.zarr import Client
 from multiprocessing import Pool
 from matplotlib import pyplot as plt
 from sklearn.metrics import mean_squared_error
