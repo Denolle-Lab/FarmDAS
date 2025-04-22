@@ -70,7 +70,8 @@ def eto_shortterm(rad, T, wind, RH):
 ## The moisture at depth is forward modelled to account for the drainage and evaporation
 ## The PSD data is calibrated to model the water increase due to the rain
 class hydro0:
-    def __init__(self, prec, porosity, s0, T, I, etc, damage_index, A_p, A_e, A_d, length=2408):
+    def __init__(self, prec, porosity, s0, T, I, etc, damage_index, A_p, A_e, A_d, length=2408, depth=200):
+        self.depth = depth  ## mm
         self.prec = prec
         self.s = s0
         self.phi = porosity  ## Porosity
@@ -100,7 +101,7 @@ class hydro0:
 
             s_rate = self.A_p * self.prec[i] - self.A_e * self.evap - self.A_d * self.drain
             
-            self.s += s_rate
+            self.s += s_rate / (self.depth * self.phi)
             self.s = min(self.s, 1) 
             s_history[i] = self.s
 
