@@ -96,7 +96,7 @@ class hydro0:
             # self.pet = 1.6 * np.power((10*self.T[i] / self.I), self.a)
             self.evap = self.s * self.etc[i] * self.damage ## Evaporation rate
 
-            ## drainage
+            ## drainage besides the vertical drainage
             self.drain = self.prec[i] * self.s * self.damage  ## Drainage rate
 
             s_rate = self.A_p * self.prec[i] - self.A_e * self.evap - self.A_d * self.drain
