@@ -14,4 +14,4 @@ To reproduce figures in [our latest study][paper], you can refer to
 
 [noisepy4das]: https://github.com/niyiyu/NoisePy4DAS-SeaDAS
 [paper]: https://arxiv.org/abs/2509.09821
-[jupyters]: https://github.com/Denolle-Lab/FarmDAS/tree/main/examples
+[jupyters]: https://github.com/Denolle-Lab/FarmDAS/tree/main/dvv_and_model
