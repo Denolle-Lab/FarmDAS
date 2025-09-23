@@ -1,5 +1,7 @@
 # Fiber-optic sensing for soil hydrodynamics under farming practices
 
+## License
+This project is licensed under the [CC BY-NC 4.0 License](https://creativecommons.org/licenses/by-nc/4.0/) — for non-commercial use only.
 
 This package uses ambient noise interferometry to monitor soil's 
 hydrodynamic response under precipitation, evapotranspiration, and
