@@ -17,11 +17,14 @@ from obspy import UTCDateTime
 from datetime import datetime
 from datetime import timedelta
 from functools import partial
-from scipy.signal import butter
+import scipy.signal as sgn
+from scipy.signal import butter, find_peaks
 from scipy.signal import detrend
 from scipy.signal import decimate
 from scipy.signal import filtfilt
 from scipy.signal import spectrogram
+from scipy.ndimage import gaussian_filter1d, median_filter
+from scipy.interpolate import interp1d
 from multiprocessing import Pool
 from matplotlib import pyplot as plt
 from sklearn.metrics import mean_squared_error
@@ -314,7 +317,7 @@ def fk_filter_2cones(vsp, w1=0, w2=0, cone1=False, cone2=False):
     return output[:n1,:n2], filtered_2d, fk2d
 
 
-def peak_dvv(new_peaks, ax, thrs=0.3):
+def peak_dvv_old(new_peaks, ax, thrs=0.3):
     f = interp1d(np.nonzero(new_peaks>0)[0], new_peaks[new_peaks>0], bounds_error=False, fill_value="extrapolate", kind='linear')
     new_peaks_iloc = f(np.arange(len(new_peaks)))
     grad_iloc = np.abs(np.diff(new_peaks_iloc))
@@ -389,6 +392,70 @@ def peak_dvv(new_peaks, ax, thrs=0.3):
     ax.plot(x, new_peaks_iloc, 'g')
 
     return new_peaks_iloc
+
+
+
+### piece-wise linear interpolation (Nan You)
+def peak_dvv(new_peaks, ax, thrs=0.3):
+
+    ### interpolate to remove negative points
+    f = interp1d(np.nonzero(new_peaks>0)[0], new_peaks[new_peaks>0], bounds_error=False, fill_value="extrapolate", kind='linear')
+    new_peaks_iloc = f(np.arange(len(new_peaks)))
+
+    ### subsegments based on gradient
+    grad_iloc = np.abs(np.diff(new_peaks_iloc))
+    # ax.plot(x[1:], grad_iloc, 'purple')
+    grad_peaks_iloc, _ = find_peaks(grad_iloc, height=10)
+    grad_peaks_iloc += 1  ## shift to correct diff
+
+    ### Each segment
+    preserve_inds = [np.arange(50, 60), np.arange(201, 299)]
+    for (ini, iend) in [[0, 50], [60, 201], [299, len(new_peaks_iloc)]]:
+
+        ### find sub-segments in each segment
+        split_pts = grad_peaks_iloc[(grad_peaks_iloc > ini) & (grad_peaks_iloc < iend)]-ini
+        if len(split_pts) <= 1:
+            preserve_inds.append(np.arange(ini, iend))
+            continue
+        ### split sub-segments
+        data_segs = np.split(new_peaks_iloc[ini:iend], split_pts)
+        ind_segs = np.split(np.arange(ini, iend), split_pts)
+        ### find longest sub-segment
+        ref_seg_id = np.argmax([len(seg) for seg in data_segs])
+        mean_segs = np.array([np.mean(seg) for seg in data_segs])
+        preserve_seg_id = [ref_seg_id]
+
+        num_iter = 0
+        while True:
+            
+            ### fit a line to selected sub-segments
+            coefficients = np.polyfit(np.hstack([ind_segs[i] for i in preserve_seg_id]), 
+                np.hstack([data_segs[i] for i in preserve_seg_id]), 1)
+            polynomial = np.poly1d(coefficients)
+
+            ### calculate distance between all sub-segments and the line
+            mean_distance = np.array([np.sqrt(np.mean(np.square(polynomial(ind_segs[i])-data_segs[i]))) for i in range(len(data_segs))])
+
+            # collect sub-segments for merging
+            if num_iter == 0:
+                combine_ids = np.argsort(mean_distance)[:2]
+            else:
+                combine_ids = np.nonzero(mean_distance < thrs * (np.amax(mean_segs)-np.amin(mean_segs)))[0]
+            if len(combine_ids) == len(preserve_seg_id) or len(combine_ids) == 0:
+                break
+            preserve_seg_id = combine_ids
+            num_iter += 1
+
+        preserve_inds.extend([ind_segs[i] for i in preserve_seg_id])
+        
+    ### take all selected sub-segments of all segments
+    preserve_inds = np.hstack(preserve_inds)
+    f = interp1d(preserve_inds, new_peaks_iloc[preserve_inds], bounds_error=False, fill_value="extrapolate", kind='linear')
+    new_peaks_iloc[:] = f(np.arange(len(new_peaks_iloc)))
+    
+    # ax.plot(x, new_peaks_iloc, 'g')
+
+    return new_peaks_iloc.astype(int)  
 
 
 def multi_bounds(iloc, peaks, input_image, ax, cc_dvv, new_peaks):
@@ -503,11 +570,50 @@ def multi_bounds(iloc, peaks, input_image, ax, cc_dvv, new_peaks):
 
 
 
-def compute_misfit(a, b, tillage_interpolated, tire_interpolated, dvv_variability):
+def compute_misfit(a, b, tillage_interpolated, tire_interpolated, dvv_variability, sigma=0.5):
     scaled_mechanical = np.power(tillage_interpolated, a) * np.power(tire_interpolated, b)
-    scaled_mechanical = scaled_mechanical/np.std(scaled_mechanical)
-    scaled_variability =dvv_variability/np.std(dvv_variability)
+    # scaled_mechanical = median_filter(scaled_mechanical, size=3)
+    scaled_mechanical = gaussian_filter1d(scaled_mechanical, sigma=sigma)
+    # scaled_mechanical = np.convolve(scaled_mechanical, np.ones(sigma)/sigma, mode='same')
+    scaled_mechanical = scaled_mechanical-np.min(scaled_mechanical)
+    scaled_mechanical = scaled_mechanical/np.max(scaled_mechanical)
+    
+    dvv_variability = dvv_variability-np.min(dvv_variability)
+    scaled_variability =dvv_variability/np.max(dvv_variability)
+    # scaled_variability = gaussian_filter1d(scaled_variability, sigma=sigma)
     correlation = np.corrcoef(scaled_variability, scaled_mechanical)[0, 1]
     mse = mean_squared_error(scaled_variability, scaled_mechanical)
+    mae = np.mean(np.abs(scaled_variability - scaled_mechanical))
 
-    return correlation, mse, scaled_mechanical, scaled_variability
+    return correlation, mse, mae, scaled_mechanical, scaled_variability
+
+
+def compute_misfit1(a, b, tillage_interpolated, tire_interpolated, dvv_variability, sigma=1):
+    scaled_mechanical = np.power(tillage_interpolated, a) + np.power(tire_interpolated, b)
+    # scaled_mechanical = median_filter(scaled_mechanical, size=3)
+    scaled_mechanical = gaussian_filter1d(scaled_mechanical, sigma=sigma)
+    # scaled_mechanical = np.convolve(scaled_mechanical, np.ones(sigma)/sigma, mode='same')
+    scaled_mechanical = scaled_mechanical/np.max(scaled_mechanical)
+    
+    scaled_variability =dvv_variability/np.max(dvv_variability)
+    # scaled_variability = gaussian_filter1d(scaled_variability, sigma=sigma)
+    correlation = np.corrcoef(scaled_variability, scaled_mechanical)[0, 1]
+    mse = mean_squared_error(scaled_variability, scaled_mechanical)
+    mae = np.mean(np.abs(scaled_variability - scaled_mechanical))
+
+    return correlation, mse, mae, scaled_mechanical, scaled_variability
+
+def compute_misfit2(a, b, tillage_interpolated, tire_interpolated, dvv_variability, sigma=1):
+    scaled_mechanical = tillage_interpolated*a + tire_interpolated*b
+    # scaled_mechanical = median_filter(scaled_mechanical, size=3)
+    scaled_mechanical = gaussian_filter1d(scaled_mechanical, sigma=sigma)
+    # scaled_mechanical = np.convolve(scaled_mechanical, np.ones(sigma)/sigma, mode='same')
+    scaled_mechanical = scaled_mechanical/np.max(scaled_mechanical)
+    
+    scaled_variability =dvv_variability/np.max(dvv_variability)
+    # scaled_variability = gaussian_filter1d(scaled_variability, sigma=sigma)
+    correlation = np.corrcoef(scaled_variability, scaled_mechanical)[0, 1]
+    mse = mean_squared_error(scaled_variability, scaled_mechanical)
+    mae = np.mean(np.abs(scaled_variability - scaled_mechanical))
+
+    return correlation, mse, mae, scaled_mechanical, scaled_variability
