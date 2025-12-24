@@ -1,7 +1,7 @@
 # Fiber-Optic Sensing for Soil Hydrodynamics under Farming Practices
 
 [![License: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/)
-[![DOI](https://zenodo.org/badge/18040281.svg)](https://zenodo.org/badge/latestdoi/18040281)
+
 
 This package uses **ambient noise interferometry** to monitor soil hydrodynamic responses under **precipitation, evapotranspiration, and drainage**, allowing the assessment of soil degradation caused by **tillage and compaction**.
 
